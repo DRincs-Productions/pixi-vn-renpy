@@ -1,0 +1,3 @@
+[submodule "src/vscode-extension"]
+	path = src/vscode-extension
+	url = https://github.com/BlackRam-oss/vscode-language-renpy
