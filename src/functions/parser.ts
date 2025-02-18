@@ -1,4 +1,3 @@
-import { Range as VSRange } from "vscode";
 import { RpyProgram } from "../vscode-extension/src/interpreter/program";
 import { LogCategory, logCatMessage } from "../vscode-extension/src/logger";
 import { AST } from "../vscode-extension/src/parser/ast-nodes";
@@ -34,7 +33,7 @@ label start:
         }
     }
 
-    const errors: VSRange[] = [];
+    const errors: any[] = [];
     for (const error of parser.errors) {
         logCatMessage(LogLevel.Error, LogCategory.Parser, parser.getErrorMessage(error));
         // errors.push(error.errorRange.toVSRange(activeEditor.document));
