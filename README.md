@@ -10,6 +10,9 @@ git submodule update --init --recursive
 npm install
 cd src/vscode-extension
 git checkout test
+cd ..
+cd ..
+
 ```
 
 What is src/vscode-extension? It is a submodule that contains the vscode extension https://github.com/BlackRam-oss/vscode-language-renpy . this repo have 2 branch:
