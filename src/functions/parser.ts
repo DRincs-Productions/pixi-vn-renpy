@@ -52,7 +52,6 @@ label start:
         }
     }
 
-    const asd = ast.nodes;
-    console.log(asd);
+    ast.toString();
     // activeEditor.setDecorations(errorDecorationType, errors);
 }
