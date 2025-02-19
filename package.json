@@ -26,6 +26,7 @@
   "funding": "https://github.com/DRincs-Productions/pixi-vn?sponsor=1",
   "devDependencies": {
     "@drincs/pixi-vn-json": "^1.3.0",
+    "@vscode/debugadapter": "^1.68.0",
     "jsdom": "^26.0.0",
     "ts-node": "^10.9.2",
     "tsup": "^8.3.6",
