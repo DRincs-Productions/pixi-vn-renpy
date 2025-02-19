@@ -52,5 +52,7 @@ label start:
         }
     }
 
+    const asd = ast.nodes;
+    console.log(asd);
     // activeEditor.setDecorations(errorDecorationType, errors);
 }
