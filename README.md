@@ -26,3 +26,5 @@ npm test
 What is `npm test`? It runs the test script. there is a 1 test file in the `test` folder, that runs the parser.
 
 How to debug? If you use VScode it should automatically open a JS terminal for debugging. Then you can set breakpoints and run `npm test`
+
+What are the errors reported by vscode in the src/vscode-extension folder? They can be ignored for now. vitest only considers the strictly necessary elements, ignoring unused functions and types.
