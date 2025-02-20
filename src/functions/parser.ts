@@ -3,7 +3,7 @@ import { LogCategory, logCatMessage } from "../vscode-extension/src/logger";
 import { AST } from "../vscode-extension/src/parser/ast-nodes";
 import { DocumentParser } from "../vscode-extension/src/parser/parser";
 import { RenpyStatementRule } from "../vscode-extension/src/parser/renpy-grammar-rules";
-import { LogLevel, TextDocument } from "../vscode-extension/src/utilities/vscode-wrappers";
+import { DocumentRange, LogLevel, TextDocument } from "../vscode-extension/src/utilities/vscode-wrappers";
 
 export async function testParser() {
     let document = new TextDocument(
@@ -33,10 +33,10 @@ label start:
         }
     }
 
-    const errors: any[] = [];
+    const errors: DocumentRange[] = [];
     for (const error of parser.errors) {
         logCatMessage(LogLevel.Error, LogCategory.Parser, parser.getErrorMessage(error));
-        // errors.push(error.errorRange.toVSRange(activeEditor.document));
+        errors.push(error.errorRange);
     }
 
     logCatMessage(LogLevel.Debug, LogCategory.Parser, ast.toString());
@@ -51,7 +51,4 @@ label start:
             errors.push(error.errorLocation.range);
         }
     }
-
-    ast.toString();
-    // activeEditor.setDecorations(errorDecorationType, errors);
 }
