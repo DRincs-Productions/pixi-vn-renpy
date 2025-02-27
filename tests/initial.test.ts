@@ -1,9 +1,9 @@
 import { expect, test } from "vitest";
-import { parser } from "../src/functions";
+import { importRenpyText } from "../src";
 
 test("Pixi.js Application", async () => {
     try {
-        parser(`
+        importRenpyText(`
         label start:
             "Hello, World!"
             "This is a test."
