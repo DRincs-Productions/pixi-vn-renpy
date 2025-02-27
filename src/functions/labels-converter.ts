@@ -18,6 +18,7 @@ export function getRenpyLabels(labels: (ASTNode | null)[]): PixiVNJsonLabels | u
             }
             let labelName = node.labelName.globalName;
             let steps: PixiVNJsonLabelStep[] = node.block.map(stepMapper);
+            label[labelName] = steps;
         });
 
         return label;
@@ -40,7 +41,7 @@ function dialogueMapper(
     | PixiVNJsonDialog<PixiVNJsonDialogText>
     | PixiVNJsonConditionalStatements<PixiVNJsonDialog<PixiVNJsonDialogText>>
     | undefined {
-    let text = block.what ? block.what.toString() : undefined;
+    let text = block.what ? `${block.what.value}` : undefined;
     let character = block.who ? block.who.toString() : undefined;
     if (!text) {
         return undefined;
