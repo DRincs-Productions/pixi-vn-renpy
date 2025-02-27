@@ -5,11 +5,11 @@ import { DocumentParser } from "../vscode-extension/src/parser/parser";
 import { RenpyStatementRule } from "../vscode-extension/src/parser/renpy-grammar-rules";
 import { DocumentRange, LogLevel, TextDocument } from "../vscode-extension/src/utilities/vscode-wrappers";
 
-export async function parser(text: string, filePath = "start.rpy") {
+export function parser(text: string, filePath = "start.rpy") {
     let document = new TextDocument(text, filePath);
 
     const parser = new DocumentParser(document);
-    await parser.initialize();
+    parser.initialize();
 
     const statementParser = new RenpyStatementRule();
     const ast = new AST();
