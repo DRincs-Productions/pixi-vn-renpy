@@ -5,16 +5,10 @@ import { DocumentParser } from "../vscode-extension/src/parser/parser";
 import { RenpyStatementRule } from "../vscode-extension/src/parser/renpy-grammar-rules";
 import { DocumentRange, LogLevel, TextDocument } from "../vscode-extension/src/utilities/vscode-wrappers";
 
-export async function testParser() {
-    let document = new TextDocument(
-        `
-label start:
-    "Hello, World!"
-`,
-        "start.rpy"
-    );
+export async function parser(text: string, filePath = "start.rpy") {
+    let document = new TextDocument(text, filePath);
 
-    const parser = new DocumentParser(document as any);
+    const parser = new DocumentParser(document);
     await parser.initialize();
 
     const statementParser = new RenpyStatementRule();
@@ -51,4 +45,8 @@ label start:
             errors.push(error.errorLocation.range);
         }
     }
+    return {
+        labels: ast.nodes.buffer,
+        errors: errors,
+    };
 }
