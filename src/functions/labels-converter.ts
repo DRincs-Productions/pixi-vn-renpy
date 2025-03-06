@@ -12,12 +12,23 @@ export function getRenpyLabels(labels: (ASTNode | null)[]): PixiVNJsonLabels | u
     try {
         let label: PixiVNJsonLabels = {};
 
-        labels.forEach((node) => {
+        labels.forEach((node, index) => {
             if (node === null) {
                 return;
             }
             let labelName = node.labelName.globalName;
             let steps: PixiVNJsonLabelStep[] = node.block.map(stepMapper);
+            if (labels.length > index + 1) {
+                let nextNode = labels[index + 1];
+                if (nextNode !== null && steps.length > 0) {
+                    steps.push({
+                        labelToOpen: {
+                            type: "call",
+                            label: nextNode.labelName.globalName,
+                        },
+                    });
+                }
+            }
             label[labelName] = steps;
         });
 

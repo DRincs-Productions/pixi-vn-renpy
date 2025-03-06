@@ -18,7 +18,7 @@ test("Label test 1", async () => {
                 {
                     labelToOpen: {
                         label: "end",
-                        type: "jump",
+                        type: "call",
                     },
                 },
             ],
