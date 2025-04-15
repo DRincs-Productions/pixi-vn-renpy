@@ -8,37 +8,40 @@ import {
 import {
     ASTNode,
     CallStatementNode,
+    JumpStatementNode,
+    LabelStatementNode,
     ReturnStatementNode,
     SayStatementNode,
     StatementNode,
 } from "../vscode-extension/src/parser/ast-nodes";
 import { logger } from "./log-utility";
 
-export function getRenpyLabels(labels: (ASTNode | null)[]): PixiVNJsonLabels | undefined {
+export function getRenpyLabels(node: LabelStatementNode, nexts: (ASTNode | null)[], labels: PixiVNJsonLabels) {
     try {
-        let label: PixiVNJsonLabels = {};
-
-        labels.forEach((node, index) => {
-            if (node === null) {
-                return;
-            }
-            let labelName = node.labelName.globalName;
-            let steps: PixiVNJsonLabelStep[] = node.block.map(stepMapper);
-            if (labels.length > index + 1) {
-                let nextNode = labels[index + 1];
-                if (nextNode !== null && steps.length > 0) {
+        if (node === null) {
+            return;
+        }
+        let labelName = node.labelName.globalName;
+        if (!labelName) {
+            logger.error("Label name is undefined", node);
+            return;
+        }
+        let steps: PixiVNJsonLabelStep[] = node.block.map(stepMapper);
+        nexts.forEach((nextNode) => {
+            if (nextNode instanceof LabelStatementNode) {
+                let nextLabelName = nextNode.labelName.globalName;
+                if (nextLabelName) {
                     steps.push({
                         labelToOpen: {
                             type: "call",
-                            label: nextNode.labelName.globalName,
+                            label: nextLabelName,
                         },
                     });
                 }
+                return;
             }
-            label[labelName] = steps;
         });
-
-        return label;
+        labels[labelName] = steps;
     } catch (e) {
         logger.error("Error parsing renpy file", e);
     }
@@ -61,9 +64,16 @@ function stepMapper(block: StatementNode): PixiVNJsonLabelStep {
             end: "label_end",
             goNextStep: true,
         };
+    } else if (block instanceof JumpStatementNode) {
+        return {
+            labelToOpen: {
+                type: "jump",
+                label: block.target.globalName,
+            },
+        };
+    } else {
+        logger.error("Unknown block type", block);
     }
-
-    logger.error("Unknown block type", block);
 
     return {};
 }
@@ -75,7 +85,7 @@ function dialogueMapper(
     | PixiVNJsonConditionalStatements<PixiVNJsonDialog<PixiVNJsonDialogText>>
     | undefined {
     let text = block.what ? `${block.what.value}` : undefined;
-    let character = block.who ? block.who.toString() : undefined;
+    let character = block.who ? block.who.name : undefined;
     if (!text) {
         return undefined;
     }

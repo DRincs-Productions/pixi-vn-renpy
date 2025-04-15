@@ -1,5 +1,7 @@
-import { PixiVNJson } from "@drincs/pixi-vn-json";
+import { PixiVNJson, PixiVNJsonLabels } from "@drincs/pixi-vn-json";
+import { LabelStatementNode } from "../vscode-extension/src/parser/ast-nodes";
 import { getRenpyLabels } from "./labels-converter";
+import { logger } from "./log-utility";
 import { parser } from "./parser";
 
 export function convertRenpyText(text: string): PixiVNJson | undefined {
@@ -10,7 +12,18 @@ export function convertRenpyText(text: string): PixiVNJson | undefined {
         return undefined;
     }
 
-    result.labels = getRenpyLabels(obj.labels);
+    const labels: PixiVNJsonLabels = {};
+
+    obj.nodes.forEach((node, index) => {
+        if (node instanceof LabelStatementNode) {
+            const nexts = obj.nodes.slice(index + 1);
+            getRenpyLabels(node, nexts, labels);
+        } else {
+            logger.error("Error parsing renpy file", node);
+        }
+    });
+
+    result.labels = labels;
 
     return result;
 }

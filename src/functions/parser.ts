@@ -46,7 +46,7 @@ export function parser(text: string, filePath = "start.rpy") {
         }
     }
     return {
-        labels: ast.nodes.buffer,
+        nodes: ast.nodes.buffer,
         errors: errors,
     };
 }
