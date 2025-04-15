@@ -49,8 +49,14 @@ test("Label test 2", async () => {
                 },
                 {
                     labelToOpen: {
-                        label: "hurry_home",
                         type: "call",
+                        label: "hurry_home",
+                    },
+                },
+                {
+                    labelToOpen: {
+                        type: "call",
+                        label: "hurry_home",
                     },
                 },
             ],

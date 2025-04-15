@@ -5,7 +5,13 @@ import {
     PixiVNJsonLabels,
     PixiVNJsonLabelStep,
 } from "@drincs/pixi-vn-json";
-import { ASTNode, SayStatementNode } from "../vscode-extension/src/parser/ast-nodes";
+import {
+    ASTNode,
+    CallStatementNode,
+    ReturnStatementNode,
+    SayStatementNode,
+    StatementNode,
+} from "../vscode-extension/src/parser/ast-nodes";
 import { logger } from "./log-utility";
 
 export function getRenpyLabels(labels: (ASTNode | null)[]): PixiVNJsonLabels | undefined {
@@ -38,12 +44,28 @@ export function getRenpyLabels(labels: (ASTNode | null)[]): PixiVNJsonLabels | u
     }
 }
 
-function stepMapper(block: SayStatementNode): PixiVNJsonLabelStep {
-    let step: PixiVNJsonLabelStep = {
-        dialogue: dialogueMapper(block),
-    };
+function stepMapper(block: StatementNode): PixiVNJsonLabelStep {
+    if (block instanceof SayStatementNode) {
+        return {
+            dialogue: dialogueMapper(block),
+        };
+    } else if (block instanceof CallStatementNode) {
+        return {
+            labelToOpen: {
+                type: "call",
+                label: block.target.globalName,
+            },
+        };
+    } else if (block instanceof ReturnStatementNode) {
+        return {
+            end: "label_end",
+            goNextStep: true,
+        };
+    }
 
-    return step;
+    logger.error("Unknown block type", block);
+
+    return {};
 }
 
 function dialogueMapper(
