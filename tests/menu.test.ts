@@ -32,3 +32,71 @@ label marry:
 `);
     expect(res).toEqual(expected);
 });
+
+test("In-Game Menus", async () => {
+    let expected: PixiVNJson = {
+        labels: {},
+    };
+    let res = convertRenpyText(`
+menu:
+     "What should I do?"
+
+     "Drink coffee.":
+         "I drink the coffee, and it's good to the last drop."
+
+     "Drink tea.":
+         $ drank_tea = True
+         "I drink the tea, trying not to make a political statement as I do."
+
+     "Genuflect.":
+         jump genuflect_ending
+
+label after_menu:
+     "After having my drink, I got on with my morning."
+`);
+    expect(res).toEqual(expected);
+});
+
+test("Menu Set", async () => {
+    let expected: PixiVNJson = {
+        labels: {},
+    };
+    let res = convertRenpyText(`
+default menuset = set()
+
+menu chapter_1_places:
+    set menuset
+    "Where should I go?"
+
+    "Go to class.":
+        jump go_to_class
+
+    "Go to the bar.":
+        jump go_to_bar
+
+    "Go to jail.":
+        jump go_to_jail
+
+label chapter_1_after_places:
+    "Wow, that was one heck of a Tuesday."
+`);
+    expect(res).toEqual(expected);
+});
+
+test("Menu Arguments", async () => {
+    let expected: PixiVNJson = {
+        labels: {},
+    };
+    let res = convertRenpyText(`
+menu ("jfk", screen="airport"):
+    "Chicago, IL" (200):
+        jump chicago_trip
+
+    "Dallas, TX" (150, sale=True):
+        jump dallas_trip
+
+    "Hot Springs, AR" (300) if secret_unlocked:
+        jump hot_springs_trip
+`);
+    expect(res).toEqual(expected);
+});
