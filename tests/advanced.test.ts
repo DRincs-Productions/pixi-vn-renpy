@@ -24,3 +24,18 @@ label label_without_params:
 `);
     expect(res).toEqual(expected);
 });
+
+test("Say with Image Attributes 1", async () => {
+    let expected: PixiVNJson = {
+        labels: {},
+    };
+    let res = convertRenpyText(`
+define e = Character("Eileen", image="eileen")
+
+label start:
+    show eileen concerned
+    e "I'm a little upset at you."
+    e happy "But it's just a passing thing."
+`);
+    expect(res).toEqual(expected);
+});
