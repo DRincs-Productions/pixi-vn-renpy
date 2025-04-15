@@ -7,6 +7,9 @@ test("Menu test 1", async () => {
         labels: {},
     };
     let res = convertRenpyText(`
+define s = Character('Sylvie', color="#c8ffc8")
+define m = Character('Me', color="#c8c8ff")
+
 label start:
     s "Sure, but what's a \"visual novel?\""
 
