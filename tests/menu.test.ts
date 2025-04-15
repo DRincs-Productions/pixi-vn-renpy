@@ -2,7 +2,7 @@ import { PixiVNJson } from "@drincs/pixi-vn-json";
 import { expect, test } from "vitest";
 import { convertRenpyText } from "../src/functions";
 
-test("Menu test 1", async () => {
+test("Menus, Labels, and Jumps", async () => {
     let expected: PixiVNJson = {
         labels: {},
     };

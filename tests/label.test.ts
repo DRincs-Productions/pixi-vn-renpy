@@ -126,7 +126,7 @@ label hurry_home:
     expect(res).toEqual(expected);
 });
 
-test("Label test 4", async () => {
+test("A Simple Game", async () => {
     let expected: PixiVNJson = {
         labels: {
             back_in_london: [
@@ -164,6 +164,77 @@ label start:
     "I can't bring myself to admit that it all went in one ear and out the other."
     "Me" "Are you going home now? Wanna walk back with me?"
     "Sylvie" "Sure!"
+`);
+    expect(res).toEqual(expected);
+});
+
+test("Label Statement 3", async () => {
+    let expected: PixiVNJson = {
+        labels: {},
+    };
+    let res = convertRenpyText(`
+label origin:
+"a"
+label hasblock:
+    "b"
+"c"
+return
+`);
+    expect(res).toEqual(expected);
+});
+
+test("Label Statement 4", async () => {
+    let expected: PixiVNJson = {
+        labels: {},
+    };
+    let res = convertRenpyText(`
+label global_label:
+    "Under a global label.."
+label .local_label:
+    "..resides a local one."
+    jump .another_local
+label .another_local:
+    "And another !"
+    jump .local_label
+    return
+
+label another_global:
+    "Now lets jump inside a local label located somewhere else."
+    jump global_label.local_name
+`);
+    expect(res).toEqual(expected);
+});
+
+test("Jump Statement", async () => {
+    let expected: PixiVNJson = {
+        labels: {},
+    };
+    let res = convertRenpyText(`
+label loop_start:
+    e "Oh no! It looks like we're trapped in an infinite loop."
+    jump loop_start
+`);
+    expect(res).toEqual(expected);
+});
+
+test("Call Statement", async () => {
+    let expected: PixiVNJson = {
+        labels: {},
+    };
+    let res = convertRenpyText(`
+label start:
+    e "First, we will call a subroutine."
+    call subroutine
+    call subroutine(2)
+    call expression "sub" + "routine" pass (count=3)
+    return
+
+# ...
+
+label subroutine(count=1):
+    e "I came here [count] time(s)."
+    e "Next, we will return from the subroutine."
+    return
 `);
     expect(res).toEqual(expected);
 });
