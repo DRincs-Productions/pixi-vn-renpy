@@ -1,0 +1,31 @@
+import { PixiVNJson } from "@drincs/pixi-vn-json";
+import { expect, test } from "vitest";
+import { convertRenpyText } from "../src/functions";
+
+test("Menu test 1", async () => {
+    let expected: PixiVNJson = {
+        labels: {},
+    };
+    let res = convertRenpyText(`
+label start:
+    s "Sure, but what's a \"visual novel?\""
+
+menu:
+    "It's a videogame.":
+        jump game
+    "It's an interactive book.":
+        jump book
+
+label game:
+    m "It's a kind of videogame you can play on your computer or a console."
+    jump marry
+
+label book:
+    m "It's like an interactive book that you can read on a computer or a console."
+    jump marry
+
+label marry:
+    "And so, we become a visual novel creating duo."
+`);
+    expect(res).toEqual(expected);
+});
